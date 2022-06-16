@@ -1,0 +1,315 @@
+---
+title: "fearanalysis"
+author: "Zack"
+date: "6/14/2022"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+library(sjPlot)
+library(AICcmodavg)
+library(tidyverse)
+library(dplyr)
+library(gridExtra)
+library(reshape2)
+library(rstatix)
+library(ggpubr)
+library(gtable)
+library(grid)
+library(ggeasy)
+```
+
+```{r}
+dat<- read.csv(file="/Users/explore/Desktop/RAW_meso_data.csv")
+head(dat)
+```
+
+```{r}
+##filtering out each distance so that we can take means and visualize using line graphs 
+fc.dat <- dat %>% filter(treatment=="fc")
+fc1.dat <- fc.dat %>% filter(distance==1)
+fc2.dat <- fc.dat %>% filter(distance==2)
+fc3.dat <- fc.dat %>% filter(distance==3)
+fc4.dat <- fc.dat %>% filter(distance==4)
+fc5.dat <- fc.dat %>% filter(distance==5)
+
+
+tc.dat <- dat %>% filter(treatment=="tc")
+tc1.dat <- tc.dat %>% filter(distance==1)
+tc2.dat <- tc.dat %>% filter(distance==2)
+tc3.dat <- tc.dat %>% filter(distance==3)
+tc4.dat <- tc.dat %>% filter(distance==4)
+tc5.dat <- tc.dat %>% filter(distance==5)
+
+
+on.dat <- dat %>% filter(treatment=="on")
+on1.dat <- on.dat %>% filter(distance==1)
+on2.dat <- on.dat %>% filter(distance==2)
+on3.dat <- on.dat %>% filter(distance==3)
+on4.dat <- on.dat %>% filter(distance==4)
+on5.dat <- on.dat %>% filter(distance==5)
+
+
+tw.dat <- dat %>% filter(treatment=="tw")
+tw1.dat <- tw.dat %>% filter(distance==1)
+tw2.dat <- tw.dat %>% filter(distance==2)
+tw3.dat <- tw.dat %>% filter(distance==3)
+tw4.dat <- tw.dat %>% filter(distance==4)
+tw5.dat <- tw.dat %>% filter(distance==5)
+
+
+th.dat <- dat %>% filter(treatment=="th")
+th1.dat <- th.dat %>% filter(distance==1)
+th2.dat <- th.dat %>% filter(distance==2)
+th3.dat <- th.dat %>% filter(distance==3)
+th4.dat <- th.dat %>% filter(distance==4)
+th5.dat <- th.dat %>% filter(distance==5)
+```
+
+
+```{r}
+ggplot(data=on.dat, aes(group=hour))+
+  geom_boxplot(aes(hour,length, color=as.factor(distance)))+
+  facet_wrap(vars(distance))
+
+ggplot(data=tw.dat)+
+  geom_boxplot(aes(hour,length, group=hour, color=as.factor(distance)))+
+  facet_wrap(vars(distance))
+
+ggplot(data=th.dat)+
+  geom_boxplot(aes(hour,length, group=hour, color=as.factor(distance)))+
+  facet_wrap(vars(distance))
+
+ggplot(data=tc.dat)+
+  geom_boxplot(aes(hour,length, group=hour, color=as.factor(distance)))+
+  facet_wrap(vars(distance))
+
+ggplot(data=fc.dat)+
+  geom_boxplot(aes(hour,length, group=hour, color=as.factor(distance)))+
+  facet_wrap(vars(distance))
+```
+
+```{r}
+on1<-ggplot(data=on1.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+on2<-ggplot(data=on2.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+on3<-ggplot(data=on3.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+on4<-ggplot(data=on4.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+on5<-ggplot(data=on5.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+```
+
+```{r}
+tw1<- ggplot(data=tw1.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tw2<- ggplot(data=tw2.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tw3<- ggplot(data=tw3.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tw4<- ggplot(data=tw4.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tw5<- ggplot(data=tw5.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+```
+
+```{r}
+th1<- ggplot(data=th1.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+th2<- ggplot(data=th2.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+th3<- ggplot(data=th3.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+th4<- ggplot(data=th4.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+th5<- ggplot(data=th5.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+```
+
+```{r}
+tc1<- ggplot(data=tc1.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tc2<- ggplot(data=tc2.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tc3<- ggplot(data=tc3.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tc4<- ggplot(data=tc4.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+tc5<- ggplot(data=tc5.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+```
+```{r}
+fc1<- ggplot(data=fc1.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+fc2<- ggplot(data=fc2.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+fc3<- ggplot(data=fc3.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+fc4<- ggplot(data=fc4.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+
+fc5<- ggplot(data=fc5.dat)+
+  geom_point(aes(hour,length))+
+  geom_smooth(aes(hour,length))+
+  scale_y_continuous(name="Length", limits=c(0, 3.5))+
+  theme_bw()
+ 
+```
+
+
+```{r}
+grid.arrange(on1,tw1,th1,tc1,fc1,on2,tw2,th2,tc2,fc2,on3,tw3,th3,tc3,fc3,on4,tw4,th4,tc4,fc4,on5,tw5,th5,tc5,fc5, nrow=5, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+
+
+```
+```{r}
+grid.arrange(on1, on2,on3,on4,on5,tw1,tw2,tw3,tw4,tw5,th1,th2,th3,th4,th5,tc1,tc2,tc3,tc4,tc5,fc1,fc2,fc3,fc4,fc5, nrow=5, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+
+```{r}
+grid.arrange(on1,tw1,th1,tc1,fc1, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(on2,tw2,th2,tc2,fc2, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(on3,tw3,th3,tc3,fc3, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(on4,tw4,th4,tc4,fc4, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(on5,tw5,th5,tc5,fc5, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+
+
+
+
+```{r}
+```{r}
+grid.arrange(on1,on2,on3,on4,on5, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(tw1,tw2,tw3,tw4,tw5, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(th1,th2,th3,th4,th5, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(tc1,tc2,tc3,tc4,tc5, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+```{r}
+grid.arrange(fc1,fc2,fc3,fc4,fc5, nrow=1, ncol=5, top = textGrob("Algal Height vs Time Elapsed", gp = gpar(fontface = "bold", cex = 1.5)),
+             bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
+```
+
+```
+
+
