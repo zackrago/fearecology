@@ -334,6 +334,8 @@ grid.arrange(fc1,fc2,fc3,fc4,fc5, nrow=1, ncol=5, top = textGrob("Algal Height v
              bottom = textGrob("Hours Elapsed",gp = gpar(cex = 1.5)))
 ```
 
-```
 
+```{r}
+ ##### Madeline is in the git hub now 
+```
 
